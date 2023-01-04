@@ -1,0 +1,108 @@
+<html>
+<head><title>CarSharer</title>
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h1> Car Sharer </h1>
+		</div>
+        <div style="background-color: white; padding-top: 20px; text-align: center;">
+
+		<a href='{{url_for("viewMain")}}'>HOME</a>
+     </div>
+		<div id="site">
+			<h2>Informationen</h2>
+			<div style="width: 100%; display: flex; justify-content: center; height: 100px;">
+				{% if data[6] == 1 %}
+					<img src="{{ url_for('static',filename='icons/auto.png') }}" alt="">
+				{% elif data[6] == 2 %}
+					<img src="{{ url_for('static',filename='icons/bus.png') }}" alt="">
+				{% else %}
+					<img src="{{ url_for('static',filename='icons/kleintransporter.png') }}" alt="">
+				{% endif %}
+			</div>
+			<div class="info">
+				<div class="info-row">
+					<span>Anbieter:</span>
+					{{ data[8] }}
+				</div>
+				<div class="info-row">
+					<span>Fahrtdatum und -uhzeit:</span>
+					{{ data[2] }}
+				</div>
+				<div class="info-row">
+					<span>Von:</span>
+					{{ data[0] }}
+				</div>
+				<div class="info-row">
+					<span>Nach:</span>
+					{{ data[1] }}
+				</div>
+				<div class="info-row">
+					<span>Anzahl freier Platze:</span>
+					{% if free_trip == True %}
+						{{ data[9] }}
+					{% else %}
+						{% set diff = data[9] - data[11] %}
+						{{ diff }}
+					{% endif %}
+				</div>
+				<div class="info-row">
+					<span>Fahrt Kosten:</span>
+					{{ data[4] }} &euro;
+				</div>
+				<div class="info-row">
+					<span>Status:</span>
+					{{ data[3] }}
+				</div>
+                <div class="info-row">
+					<span>Beschreibung:</span>
+					<textarea name="beschreibung" id="beschreibung" cols="30" rows="10" >
+						{{ data[7] }}
+					</textarea>
+				</div>
+				<hr>
+				<h2>Aktionsleiste </h2>
+				<div class="errors">
+					{% if errors|length > 0 and errors[0] != '' %}
+						<h3>Failed</h3>
+						<ul>
+							{% for error in errors %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+				<div style="width: 100%;">
+					<form method="POST" action="{{ url_for('newReservation', id=data[10], errors='empty') }}" style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">
+						<span>Anzahl Plätze für Reservierung</span>
+						<input type="number" name="seats" id="seats" required>
+						<input type="submit" value="Fahrt reservieren" class="btn" style="padding: 5px 10px; width: 200px">
+					</form>
+				</div>
+				<div style="width: 100%; display: flex; justify-content: end;">
+					<a href="{{ url_for('deleteTrip', id=data[10]) }}" class="btn"	style="width: 200px; background: red;">Fahrt löschen</a>
+				</div>
+				<div style="width: 100%; display: flex; justify-content: space-between;">
+					<h2>bewerten</h2>
+					<span style="display: flex; flex-direction: row; width: 200px;">Durchschnittsrating {{avg_ratings[0][0]}}</span>
+				</div>
+				<table>
+					{% for rating in users_ratings %}
+						<tr>
+							<td>{{rating[0]}}</td>
+							<td>{{rating[2]}}</td>
+							<td>{{rating[1]}}</td>
+						</tr>
+					{% endfor %}
+				</table>
+				<div style="width: 100%; display: flex; justify-content: end;">
+					<a href="{{ url_for('newRatingGet', id=data[10]) }}" class="btn"	style="width: 200px;">Fahrt bewerten</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

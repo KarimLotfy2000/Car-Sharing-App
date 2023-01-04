@@ -1,0 +1,59 @@
+<html>
+<head><title>CarSharer</title>
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h1> Car Sharer </h1>
+			<a href='{{url_for("viewMain")}}'>HOME</a>
+		</div>
+
+		<div id="site">
+			<form name="search" action="{{ url_for('viewSearchPost') }}" method="POST">
+				<div class="form-row">
+					<label>Start:</label>
+					<input type="text" name="start" id="start"></input>
+					<label style="margin-left: 30px;">Ziel:</label>
+					<input type="text" name="end" id="end"></input>
+				</div>
+				<div class="form-row">
+					<div style="display: flex; justify-content: center; align-items: center; margin-right: 50px">
+						<label>ab:</label>
+					<input type="date" name="date" id="date"></input>
+					</div>
+					<input type="submit" class="btn" value="Search" style="width: 200px;" />
+				</div>
+			</form>
+			<h2>Suchergebnisse</h2>
+			{% if data and data|length > 0 %}
+				{% for trip in data %}
+					<div class="trip-card">
+						{% if trip[3] == 1 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/auto.png') }}" alt="">
+							</a>
+						{% elif trip[3] == 2 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/bus.png') }}" alt="">
+							</a>
+						{% else %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/kleintransporter.png') }}" alt="">
+							</a>
+						{% endif %}
+						<div class="trip-card-line"><h4>Von</h4>: {{ trip[1] }}</div>
+						<div class="trip-card-line"><h4>Nach</h4>: {{ trip[2] }}</div>
+						<div class="trip-card-line"><h4>Fahrtkosten</h4>: {{ trip[4] }}</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="no-data">
+					There is no data!
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<html>
+<head><title>CarSharer</title>
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h1> Car Sharer </h1>
+		</div>
+
+		<div id="site">
+			<h2>Fahrt Bewertung</h2>
+			<form name="rating" action="{{ url_for('newRatingPost', id=id) }}" method="POST">
+				<div class="form-row">
+					<label>Bewertungs text:</label>
+					<textarea name="text" id="text" cols="30" rows="10" required></textarea>
+				</div>
+				<div class="form-row">
+					<label>Bewertungs rating:</label>
+					<input type="radio" name="rating" id="1" value="1" checked> 1
+					<input type="radio" name="rating" id="2" value="2"> 2
+					<input type="radio" name="rating" id="3" value="3"> 3
+					<input type="radio" name="rating" id="4" value="4"> 4
+					<input type="radio" name="rating" id="5" value="5"> 5
+				</div>
+				<div class="errors">
+					{% if errors|length > 0 %}
+					<h3 style="color: red">Failed</h3>
+					<div style="color: red;">
+						{{ errors }}
+					</div>
+				{% endif %}
+				</div>
+				<div class="right-content">
+					<input type="submit" class="btn" value="Bewertungs" style="width: 200px;" />
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

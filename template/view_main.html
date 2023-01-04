@@ -1,0 +1,100 @@
+<html>
+<head><title>CarSharer</title>
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h1> Car Sharer </h1>
+		</div>
+		<div id="site">
+	<a href="{{url_for('viewSearchGet')}}">Search</a>
+			<h2>Meine reservierten Fahrten</h2>
+			{% if data.reserved_by_user|length > 0 %}
+				{% for trip in data.reserved_by_user %}
+					<div class="trip-card">
+						{% if trip[4] == 1 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/auto.png') }}" alt="">
+							</a>
+						{% elif trip[4] == 2 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/bus.png') }}" alt="">
+							</a>
+						{% else %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/kleintransporter.png') }}" alt="">
+							</a>
+						{% endif %}
+						<div class="trip-card-line"><h4>Von</h4>: {{ trip[1] }}</div>
+						<div class="trip-card-line"><h4>Nach</h4>: {{ trip[2] }}</div>
+						<div class="trip-card-line"><h4>Status</h4>: {{ trip[3] }}</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<div class="no-data">
+					There is no data!
+				</div>
+			{% endif %}
+			<h2>Offene Fahrten</h2>
+			{% if data.free_trips|length == 0 and data.non_reserved_trips|length == 0 %}
+				<div class="no-data">
+					There is no data!
+				</div>
+			{% endif %}
+			{% if data.free_trips|length > 0 %}
+				{% for trip in data.free_trips %}
+					{% set diff = trip[5] - trip[4]  %}
+					<div class="trip-card">
+						{% if trip[6] == 1 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/auto.png') }}" alt="">
+							</a>
+						{% elif trip[6] == 2 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/bus.png') }}" alt="">
+							</a>
+						{% else %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/kleintransporter.png') }}" alt="">
+							</a>
+						{% endif %}
+						<div class="trip-card-line"><h4>Von</h4>: {{ trip[1] }}</div>
+						<div class="trip-card-line"><h4>Nach</h4>: {{ trip[2] }}</div>
+						<div class="trip-card-line"><h4>Freie Platze</h4>: {{ diff }}</div>
+						<div class="trip-card-line"><h4>Fahrtkosten</h4>: {{ trip[3] }}</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+
+			{% if data.non_reserved_trips|length > 0 %}
+				{% for trip in data.non_reserved_trips %}
+					<div class="trip-card">
+						{% if trip[5] == 1 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/auto.png') }}" alt="">
+							</a>
+						{% elif trip[5] == 2 %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/bus.png') }}" alt="">
+							</a>
+						{% else %}
+							<a class="trip-view" href="{{ url_for('viewDrive', id=trip[0], errors='empty') }}">
+								<img src="{{ url_for('static',filename='icons/kleintranspoter.png') }}" alt="">
+							</a>
+						{% endif %}
+						<div class="trip-card-line"><h4>Von</h4>: {{ trip[1] }}</div>
+						<div class="trip-card-line"><h4>Nach</h4>: {{ trip[2] }}</div>
+						<div class="trip-card-line"><h4>Freie Platze</h4>: {{ trip[4] }}</div>
+						<div class="trip-card-line"><h4>Fahrtkosten</h4>: {{ trip[3] }}</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+			<div class="right-content">
+				<a href="{{ url_for('newDriveGet') }}" class="btn">Fahrt</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

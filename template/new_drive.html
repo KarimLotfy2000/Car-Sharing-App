@@ -1,0 +1,68 @@
+<html>
+<head><title>CarSharer</title>
+	<link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h1> Car Sharer </h1>
+		</div>
+
+		<div id="site">
+			<h2>Fahrt erstellen</h2>
+			<div class="errors">
+				{% if errors|length > 0 %}
+					<h3>Failed to submit</h3>
+					<ul>
+						{% for error in errors %}
+							<li>{{ error }}</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+			<form name="drive" action="newDrive" method="POST">
+				<div class="form-row">
+					<label>Von:</label>
+					<input type="text" name="von" id="von" required>
+				</div>
+				<div class="form-row">
+					<label>Bis:</label>
+					<input type="text" name="bis" id="bis" required>
+				</div>
+				<div class="form-row">
+					<label>Maximale Kapazitat:</label>
+					<input type="number" name="maxkap" id="maxkap" required>
+				</div>
+				<div class="form-row">
+					<label>Fahrt Kosten:</label>
+					<input type="number" name="kosten" id="kosten" required>
+					<span>&euro;</span>
+				</div>
+				<div class="form-row">
+					<label>Transportmittel:</label>
+					<input type="radio" name="transportmittel" id="auto" value="1" checked> Auto
+					<input type="radio" name="transportmittel" id="bus" value="2"> Bus
+					<input type="radio" name="transportmittel" id="kleintransport" value="3"> Kleintransport
+				</div>
+				<div class="form-row">
+					<label>Fahrtdatum:</label>
+					<input type="date" name="fahrtdatum" id="fahrtdatum" required>
+					<select name="fahrttime" id="fahrttime">
+						{% for i in range(24) %}
+							<option value='{{ "{:02d}".format(i) }}:00'>{{ "{:02d}".format(i) }}:00</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="form-row">
+					<label>Beschreibung:</label>
+					<textarea name="beschreibung" id="beschreibung" cols="30" rows="10" required></textarea>
+				</div>
+				<div class="right-content">
+					<input type="submit" class="btn" value="Erstellen"/>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
